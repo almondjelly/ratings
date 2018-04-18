@@ -46,7 +46,7 @@ def load_movies():
         row = row.rstrip()
         tokens = row.split("|")
         movie_id = tokens[0]
-        title = tokens[1][:-6]
+        title = tokens[1][:-7]
         imdb_url = tokens[4]
 
         if tokens[2]:
