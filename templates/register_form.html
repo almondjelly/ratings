@@ -1,11 +1,11 @@
 {% extends 'base.html' %}
 {% block content %}
 
-  <h2>Register</h2>
+  <h2>Login / Register</h2>
 
   <form action="/register" method="POST">
-    <input type="text" value="email" placeholder="Email">
-    <input type="text" value="password" placeholder="Password">
+    Email: <input type="text" name="email">
+    Password: <input type="text" name="password">
     <input type="submit">
   </form>
 

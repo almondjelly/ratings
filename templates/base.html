@@ -4,6 +4,12 @@
     <title>Ratings</title>
 </head>
 <body>
+    <ul>
+        {% for message in get_flashed_messages() %}
+        <li>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    <p><form action="/"><input type="hidden" value="logout" name="logout"><button type="submit">Log Out</button></form><form action="/register"><input type="hidden" value="login" name="login"><button type="submit">Log In</button></form></p>
     Ratings
       <hr>
 

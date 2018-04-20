@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<!-- add the right jinja variables -->
+<h1>User</h1>
+
+<ul>
+    <li>age: {{ user_info["age"] }}</li>
+    <li>zipcode: {{ user_info["zipcode"] }}</li>
+</ul>
+
+<ul>
+    <!-- use a jinja for loop to display movies and rating scores -->
+    <li>Movie + Score</li>
+</ul>
+{% endblock %}
