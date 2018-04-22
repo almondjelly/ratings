@@ -9,8 +9,11 @@
     <li>zipcode: {{ user_info["zipcode"] }}</li>
 </ul>
 
+<h2>All Ratings:</h2>
 <ul>
     <!-- use a jinja for loop to display movies and rating scores -->
-    <li>Movie + Score</li>
+    {% for score, title, url in user_ratings %}
+    <li><a href="{{ url }}">{{ title }}</a> -- {{ score }}</li>
+    {% endfor %}
 </ul>
 {% endblock %}

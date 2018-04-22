@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<!-- add the right jinja variables -->
+<h1>Movie</h1>
+
+<ul>
+    <li><a href="{{ all_movie_data[0].imdb_url }}">Title: {{ all_movie_data[0].title }}</a></li>
+    <li>Release Date: {{ all_movie_data[0].release_date }}</li>
+
+</ul>
+
+<!-- This div is where the dropdown will appear. -->
+<div id='displayForm'></div>
+
+<!-- This div is where the logged in user's current rating is displayed. -->
+<div>
+    <span id='previousText'></span><span id='previousRating'></span>
+</div>
+
+<h2>All Ratings:</h2>
+<table>
+    <tr>
+        <th>User</th>
+        <th>Score</th>
+    </tr>
+{% for title, release_date, imdb_url, movie_id, user_id, score in all_movie_data %}
+<tr>
+    <td><a href="/users/{{ user_id }}">{{ user_id }}</a></td>
+    <td>{{ score }}</td>
+</tr>
+{% endfor %}
+</table>
+
+<script type="text/javascript">
+
+// When called after /display_rating, assigns rated_yesno variable to whatever is
+// in the database (null or user rating, e.g., 5).
+function displayRateOption(results) {
+    let rated_yesno = results;
+
+// If the rating exists, then we display the dropdown form along with the user's
+// current rating.
+    if (rated_yesno.length > 0) {
+        document.querySelector("#previousText").innerHTML = "You previously rated this movie: ";
+        // Updates the html to show the user's numerical rating.
+
+        console.log(rated_yesno)
+        document.querySelector('#previousRating').innerHTML =
+        rated_yesno[0];
+}
+    else {
+    document.querySelector("#previousText").innerHTML = "You haven't rated this movie yet!";
+    }
+
+
+// Adds an event listener to the submit button and calls success function addRating.
+// Prevents form from submitting & page refreshing; updates current rating to be
+// Whatever the new value is as indicated by user (happens in addRating)
+        document.querySelector('#ratingsSubmit').addEventListener('click', addRating);
+}
+
+// START HERE
+// When page is first loaded, we check if jinja value (user_id is in session = T/F)
+// means user is logged in. If they are, we make a get request to /display_rating
+// route which checks to see if the logged in user has a previous rating for this
+// movie, and calls displayRateOption as its success function
+if ({{ login_yesno }} === true ) {
+    $.get("/display_rating", {movie_id: {{ all_movie_data[0].movie_id }}}, displayRateOption);
+
+    let current_movie_id = {{ all_movie_data[0].movie_id }};
+
+    document.querySelector('#displayForm').innerHTML = "<form action='/add-rating' method='POST'><select name='new_rating' id='rate_me'><option value='1'>Rate 1</option><option value='2'>Rate 2</option><option value='3'>Rate 3</option><option value='4'>Rate 4</option><option value='5'>Rate 5</option></select><input type='hidden' name='movie_id' value=" + current_movie_id + "><input type='submit' id='ratingsSubmit'></form>"
+
+    }
+else {
+    document.querySelector('#displayForm').innerHTML = "If you log in, you can rate this movie!"
+}
+
+// receives results of prior post request, which is the user's new rating
+// updates inner HTML to display new (current) rating
+function updateRating(results) {
+    new_rating = results;
+    document.querySelector('#previousRating').innerHTML = new_rating;
+    document.querySelector('#previousText').innerHTML = "You rated this movie: "
+}
+
+// Prevents default function of submit button on rating form. Formats data to be
+// passed into .post request, makes post request to /add-rating route, passes
+// in new_rating value and movie_id, calls updateRating as success function
+function addRating(evt) {
+    evt.preventDefault();
+
+    let newRatingInput = {
+        "new_rating": document.querySelector('#rate_me').value,
+        "movie_id": {{ all_movie_data[0].movie_id }}
+    };
+
+    $.post("/add-rating", newRatingInput, updateRating);
+}
+</script>
+
+{% endblock %}
