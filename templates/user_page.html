@@ -12,8 +12,8 @@
 <h2>All Ratings:</h2>
 <ul>
     <!-- use a jinja for loop to display movies and rating scores -->
-    {% for score, title, url in user_ratings %}
-    <li><a href="{{ url }}">{{ title }}</a> -- {{ score }}</li>
+    {% for score, title, movie_id, url in user_ratings %}
+    <li><a href="/movies/{{ movie_id }}">{{ title }}</a> -- {{ score }}</li>
     {% endfor %}
 </ul>
 {% endblock %}

@@ -10,10 +10,25 @@
         <li>{{ message }}</li>
         {% endfor %}
     </ul>
-    <p><form action="/"><input type="hidden" value="logout" name="logout"><button type="submit">Log Out</button></form><form action="/register"><input type="hidden" value="login" name="login"><button type="submit">Log In / Register</button></form></p>
-    <a href="/">Ratings</a>
+    <p><form action="/"><input type="hidden" value="logout" name="logout"><button type="submit">Log Out</button></form><form action="/register"><input type="hidden" name="login"><button type="submit">Log In / Register</button></form></p>
+    <a href="/">Ratings Home</a> |
+
+    {% if session.get('user_id') %}
+        <a id="personalLink" href="/users/{{ session.get('user_id')}}">View My Ratings</a>
+
+    {% else %}
+        <a href="/register">Log in to view your ratings</a>
+
+    {% endif %}
+
+
       <hr>
 
       {% block content %} put your content here {% endblock %}
+
+
+
+
+
 </body>
 </html>

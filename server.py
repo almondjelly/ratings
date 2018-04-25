@@ -7,6 +7,7 @@ from flask_debugtoolbar import DebugToolbarExtension
 from model import connect_to_db, db, User, Ratings, Movie
 import pdb
 
+
 app = Flask(__name__)
 
 # Required to use Flask sessions and the debug toolbar
@@ -30,9 +31,11 @@ def index():
 
         else:
             return render_template("homepage.html")
+
     except:
         flash("You haven't logged in yet, dummy!")
         return redirect('/')
+
 
 @app.route('/movies')
 def movie_list():
@@ -40,6 +43,7 @@ def movie_list():
 
     movie_list = Movie.query.order_by('title').all()
     return render_template("movies.html", movie_list=movie_list)
+
 
 @app.route('/movies/<movie_id>')
 def movie_page(movie_id):
@@ -50,8 +54,9 @@ def movie_page(movie_id):
                                       Movie.imdb_url,
                                       Movie.movie_id,
                                       Ratings.user_id,
-                                      Ratings.score).filter_by(movie_id=movie_id
-                                      ).join(Ratings).all()
+                                      Ratings.score
+                                      ).filter_by(movie_id=movie_id
+                                                  ).join(Ratings).all()
 
     # check if user is logged in
     try:
@@ -61,6 +66,7 @@ def movie_page(movie_id):
         login_yesno = "false"
 
     return render_template("movie_details.html", all_movie_data=all_movie_data, login_yesno=login_yesno)
+
 
 @app.route('/display_rating')
 def display_rating():
@@ -117,11 +123,12 @@ def user_page(user_id):
     user_info = User.query.filter_by(user_id=user_id).first()
     user_ratings = db.session.query(Ratings.score,
                                     Movie.title,
-                                    Movie.imdb_url).filter_by(user_id=user_id
-                                    ).join(Movie).order_by('title').all()
+                                    Movie.movie_id,
+                                    Movie.imdb_url
+                                    ).filter_by(user_id=user_id).join(Movie).order_by('title').all()
 
     return render_template("user_page.html", user_info=user_info, user_ratings=
-        user_ratings)
+                           user_ratings)
 
 
 @app.route('/register', methods=['GET'])
