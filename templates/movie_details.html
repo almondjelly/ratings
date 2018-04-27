@@ -7,6 +7,13 @@
 <ul>
     <li><a href="{{ all_movie_data[0].imdb_url }}">Title: {{ all_movie_data[0].title }}</a></li>
     <li>Release Date: {{ all_movie_data[0].release_date }}</li>
+    <li>Average rating: {{ average }}</li>
+    {% if prediction %}
+        <li>We predict you'll rate this movie {{ prediction }}.</li>
+    {% endif %}
+    {% if beratement %}
+    <li>{{ beratement }}</li>
+    {% endif %}
 
 </ul>
 
